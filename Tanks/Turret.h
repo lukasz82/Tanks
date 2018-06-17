@@ -23,6 +23,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	//Dodanie szkieletu klasy odpowiedzialnej za kierunek (wektor) wiezyczki, czyli w któr¹ stronê jest zwrocona
+	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Turret", Meta = (AllowPrivateAcces = "true"))
+	class UArrowComponent* TurretDirection;
 	
 	
 };
