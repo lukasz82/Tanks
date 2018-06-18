@@ -12,8 +12,9 @@ ATurret::ATurret()
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootComponent = TurretDirection = CreateDefaultSubobject<UArrowComponent>(TEXT("TurretDirection"));
-	TurretDirection->AttachTo(RootComponent);
-
+	
+	TurretSprite = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("TurretSprite"));
+	TurretSprite->AttachTo(TurretDirection);
 }
 
 // Called when the game starts or when spawned

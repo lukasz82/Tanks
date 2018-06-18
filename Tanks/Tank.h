@@ -34,4 +34,7 @@ protected:
 	// Dodanie klasy odpowiadaj¹cej za "cia³o" czo³gu i pod³¹czenie sprita
 	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
 	class UPaperSpriteComponent* TankSprite;
+
+	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
+	UChildActorComponent* ChildTurret;
 };
