@@ -37,4 +37,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BluePrintReadOnly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
 	UChildActorComponent* ChildTurret;
+
+	// Kamera w grze inicjacja
+	//UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
+	//UCameraComponent* CameraComponent;
 };
