@@ -33,6 +33,15 @@ ATank::ATank()
 	SpringArm->AttachTo(RootComponent);
 	SpringArm->SetWorldRotation(FRotator(-90.0f, 0.0f, 0.0f));
 
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	CameraComponent->bUsePawnControlRotation = false;
+	// Rzut ortograficzny, zabezpiecza p³aski rzut na mapê bez krawêdzi
+	CameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
+	CameraComponent->OrthoWidth = 1024.f;
+	CameraComponent->AspectRatio = 3.0f / 4.0f;
+	CameraComponent->AttachTo(SpringArm, USpringArmComponent::SocketName);
+	CameraComponent->SetWorldRotation(FRotator(-90.0f, 0.0f, 0.0f));
+
 	ChildTurret = CreateDefaultSubobject<UChildActorComponent>(TEXT("Turret"));
 	ChildTurret->AttachTo(TankDirection);
 }
