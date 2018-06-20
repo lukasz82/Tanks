@@ -6,6 +6,24 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+// Ta struktura przechwytuje wszystkie mo¿liwe naciœniêcia przez u¿ytkownika
+USTRUCT()
+struct FTankInput
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(VisibleAnywere, BlueprintReadOnly, Category = "Tank Input")
+	FVector2D MovementInput;
+
+	void Sanitize();
+	void MoveX(float AxisValue);
+	void MoveY(float AxisValue);
+
+private:
+	FVector2D RawMovementInput;
+};
+
 UCLASS()
 class TANKS_API ATank : public APawn
 {
@@ -25,6 +43,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+private:
+	void MoveX(float AxisValue);
+	void MoveY(float AxisValue);
 
 protected:
 	//Dodanie szkieletu klasy odpowiedzialnej za kierunek (wektor) czo³gu, czyli w któr¹ stronê jest zwrócony
@@ -41,4 +62,7 @@ protected:
 	// Kamera w grze inicjacja
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
 	UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank input")
+	FTankInput TankInput;
 };

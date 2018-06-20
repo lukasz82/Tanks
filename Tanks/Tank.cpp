@@ -5,7 +5,25 @@
 // Trzeba pamiêtaæ ¿e w nowej wersji silnika uncludowaæ komponenty bo nie s¹ standordowo do³¹cozne do silnika
 #include "Components/ArrowComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
 
+void FTankInput::Sanitize()
+{
+	// Jeœli player naciœnie dwa przyciski jednoczeœnie, takie zabezpieczenie
+	MovementInput = RawMovementInput.ClampAxes(-1.0f, 1.0f);
+	MovementInput.GetSafeNormal();
+	RawMovementInput.Set(0.0f, 0.0f);
+}
+
+void FTankInput::MoveX(float AxisValue)
+{
+	RawMovementInput.X += AxisValue;
+}
+
+void FTankInput::MoveY(float AxisValue)
+{
+	RawMovementInput.Y += AxisValue;
+}
 // Sets default values
 ATank::ATank()
 {
@@ -58,6 +76,9 @@ void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TankInput.Sanitize();
+	UE_LOG(LogTemp,Warning,TEXT("Movement: (%f %f)"),TankInput.MovementInput.X, TankInput.MovementInput.Y);
+
 }
 
 // Called to bind functionality to input
@@ -65,5 +86,16 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	InputComponent->BindAxis("MoveX", this, &ATank::MoveX);
+	InputComponent->BindAxis("MoveY", this, &ATank::MoveY);
 }
 
+void ATank::MoveX(float AxisValue)
+{
+	TankInput.MoveX(AxisValue);
+}
+
+void ATank::MoveY(float AxisValue)
+{
+	TankInput.MoveY(AxisValue);
+}
