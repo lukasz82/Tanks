@@ -11,7 +11,7 @@ void FTankInput::Sanitize()
 {
 	// Jeœli player naciœnie dwa przyciski jednoczeœnie, takie zabezpieczenie
 	MovementInput = RawMovementInput.ClampAxes(-1.0f, 1.0f);
-	MovementInput.GetSafeNormal();
+	MovementInput = MovementInput.GetSafeNormal();
 	RawMovementInput.Set(0.0f, 0.0f);
 }
 
@@ -72,12 +72,19 @@ void ATank::BeginPlay()
 }
 
 // Called every frame
+int x = 0;
+int sekunda = 0;
 void ATank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	x++;
+	if (x == 59)
+	{
+		x = 0;
+		sekunda++;
+	}
 	TankInput.Sanitize();
-	UE_LOG(LogTemp,Warning,TEXT("Movement: (%f %f)"),TankInput.MovementInput.X, TankInput.MovementInput.Y);
+	UE_LOG(LogTemp,Warning,TEXT("Movement: (%f %f %i %i)"),TankInput.MovementInput.X, TankInput.MovementInput.Y, x, sekunda);
 
 }
 

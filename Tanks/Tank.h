@@ -7,13 +7,13 @@
 #include "Tank.generated.h"
 
 // Ta struktura przechwytuje wszystkie mo¿liwe naciœniêcia przez u¿ytkownika
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FTankInput
 {
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywere, BlueprintReadOnly, Category = "Tank Input")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Tank Input")
 	FVector2D MovementInput;
 
 	void Sanitize();
@@ -63,6 +63,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank", Meta = (AllowPrivateAcces = "true"))
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank input")
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank Input")
 	FTankInput TankInput;
 };
