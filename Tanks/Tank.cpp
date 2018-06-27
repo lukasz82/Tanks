@@ -6,6 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/SpringArmComponent.h"
 #include "Runtime/Engine/Classes/Components/InputComponent.h"
+#include "TankStatics.h"
 
 void FTankInput::Sanitize()
 {
@@ -27,7 +28,7 @@ void FTankInput::MoveY(float AxisValue)
 // Sets default values
 ATank::ATank()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	if (!RootComponent)
@@ -68,7 +69,7 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -84,8 +85,64 @@ void ATank::Tick(float DeltaTime)
 		sekunda++;
 	}
 	TankInput.Sanitize();
-	UE_LOG(LogTemp,Warning,TEXT("Movement: (%f %f %i %i)"),TankInput.MovementInput.X, TankInput.MovementInput.Y, x, sekunda);
+	//UE_LOG(LogTemp,Warning,TEXT("Movement: (%f %f %i %i)"),TankInput.MovementInput.X, TankInput.MovementInput.Y, x, sekunda);
+	// Poruszanie siê czo³gu
+	{
+		// Ustawiam wektor wzglêdem wspó³rzednych x i y
+		FVector DesiredMovementDirection = FVector(TankInput.MovementInput.X, TankInput.MovementInput.Y, 0.0f);
+		if (!DesiredMovementDirection.IsNearlyZero())
+		{
+			// Obroc czolg, obracam komponentTankDirection
+			// nie rootcomponent
+			FRotator MovementAngle = DesiredMovementDirection.Rotation();
+			float DeltaYaw = UTankStatics::FindDeltaAngleDegress(TankDirection->GetComponentRotation().Yaw, MovementAngle.Yaw);
+			bool bReverse = false;
+			if (DeltaYaw != 0.0f)
+			{
+				float AdjusedDeltatYaw = DeltaYaw;
+				if (AdjusedDeltatYaw < -90.0f)
+				{
+					AdjusedDeltatYaw += 180.0f;
+					bReverse = true;
+				}
+				else if (AdjusedDeltatYaw > 90.0f)
+				{
+					AdjusedDeltatYaw -= 180.0f;
+					bReverse = true;
+				}
 
+				float MaxYawThisFrame = YawSpeed * DeltaTime;
+
+				if (MaxYawThisFrame > FMath::Abs(AdjusedDeltatYaw))
+				{
+					if (bReverse)
+					{
+						//Ruszaj odwrotnie
+						FRotator FacingAngle = MovementAngle;
+						FacingAngle.Yaw = MovementAngle.Yaw + 180.0f;
+						TankDirection->SetWorldRotation(FacingAngle);
+					}
+					else
+					{
+						TankDirection->SetWorldRotation(MovementAngle);
+					}
+				}
+				else
+				{
+					TankDirection->AddLocalRotation(FRotator(0.0f, FMath::Sign(AdjusedDeltatYaw) * MaxYawThisFrame, 0.0f));
+				}
+			}
+
+			//Poruszanie czo³giem
+			{
+				FVector MovementDirection = TankDirection->GetForwardVector() * (bReverse ? -1.0f : 1.0f);
+				FVector Pos = GetActorLocation();
+				Pos.X += MovementDirection.X * MoveSpeed * DeltaTime;
+				Pos.Y += MovementDirection.Y * MoveSpeed * DeltaTime;
+				SetActorLocation(Pos);
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input

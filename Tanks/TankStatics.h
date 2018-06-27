@@ -13,7 +13,7 @@ UCLASS()
 class TANKS_API UTankStatics : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-
+public:
 	//** Obliczenie ró¿nicy k¹ta 180/-180 
 	UFUNCTION(BlueprintCallable, Category = "Math")
 	static float FindDeltaAngleDegress(float Angle1, float Angle2);

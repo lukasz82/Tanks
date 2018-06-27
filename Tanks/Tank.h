@@ -65,4 +65,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = "Tank Input")
 	FTankInput TankInput;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tank", meta = (ClampMin = "0.0" ))
+	float YawSpeed;
+
+
+	// Maksymlna predkosc poruszania sie czolgu
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Tank", meta = (ClampMin = "0.0"))
+	float MoveSpeed;
 };
